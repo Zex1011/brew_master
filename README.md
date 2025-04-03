@@ -22,3 +22,4 @@ Projeto de sistemas embarcados
 
 -> DOXYGEN -> opcional para documentação
 
+-> Ligar o Mixer quando os sensores de temperatura tiver 1º de diferença (manter por um período após estabilizar)
