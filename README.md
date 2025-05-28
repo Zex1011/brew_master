@@ -25,7 +25,7 @@ Projeto de sistemas embarcados
 -> Ligar o Mixer quando os sensores de temperatura tiver 1º de diferença (manter por um período após estabilizar)
 
 
-# Requisitos do Controlador de Cerveja
+# Requisitos reais definidos para o projeto
 
 ## Requisitos Funcionais (RF)
 
