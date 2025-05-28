@@ -35,11 +35,14 @@ Projeto de sistemas embarcados
 | **RF‑02** | Controlar o misturador (ligar/desligar) durante o processo.                                                                                            |
 | **RF‑03** | Controlar o aquecedor mantendo a temperatura‑alvo.                                                                                                     |
 | **RF‑04** | Permitir a execução da curva padrão.                                                                                                                   |
-| **RF‑05** | Permitir ao usuário criar e editar curvas de misturação personalizadas.                                                                                |
+| **RF‑05** | Permitir ao usuário criar e editar curvas de temperatura personalizadas.                                                                                |
 | **RF‑06** | Comunicar‑se com um computador (PC ↔ ESP) para configuração e monitoramento.                                                                           |
 | **RF‑07** | Detectar falhas (sensores fora de faixa, sobre‑temperatura, falha de agitador, etc.) e exibir avisos ao operador.                                      |
 | **RF‑08** | Oferecer controle de temperatura On/Off com histerese.                                                                                                 |
 | **RF‑09** | Acionar o misturador quando a diferença entre sensores de temperatura exceder 1 °C e mantê‑lo ligado por um período após a estabilização.              |
+| **RF‑10** | Exibir ao usuário no fim do processo a quantidade de tempo em que aquecimento ou mistura foi necessário.                                               |
+| **RF‑11** | Permitir um grande número de curvas configuradas, com adição permitira durante a configuração                                                          |
+
 
 ## Requisitos Não Funcionais (RNF)
 
