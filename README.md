@@ -81,7 +81,7 @@ Projeto de sistemas embarcados
 | **RNF‑01** | • O sensor I²C conecta‑se aos pinos dedicados SDA/SCL e responde ao comando *WHO\_AM\_I*.<br>• A comunicação opera a 100 kHz ou 400 kHz sem erros por 10 min.      |
 | **RNF‑02** | • O GPIO do misturador é dedicado e não conflita com outras funções; mede‑se nível lógico correto (3,3 V/0 V).                                                           |
 | **RNF‑03** | • O aquecedor é acionado pelo GPIO configurado com uma histerese de exemplo.<br>• Frequência de comutação ≤1 Hz.                                                                                          |
-| **RNF‑05** | • Todos os textos da interface estão em visiveís e em Português.<br>•  |
+| **RNF‑05** | • Todos os textos da interface estão em visiveís e em Português.  |
 | **RNF‑06** | • Executar “doxygen” gera HTML sem erros.                                                             |
 | **RNF‑07** | • Documentação final entregue em PDF inclui: explica do processo, statechart com estados e transições.                                                        |
 | **RNF‑08** | • Firmware compila no ESP32‑WROOM.                                                    |
