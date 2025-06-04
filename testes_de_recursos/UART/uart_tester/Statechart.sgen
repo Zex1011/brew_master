@@ -1,0 +1,15 @@
+GeneratorModel for create::cpp {
+
+	const PROJECT : string = "uart_tester"
+
+	const FOLDER : string = "src-gen"
+
+	statechart Statechart {
+
+		feature Outlet {
+			targetProject = PROJECT
+			targetFolder = FOLDER
+			libraryTargetFolder = "src"
+		}
+	}
+}
