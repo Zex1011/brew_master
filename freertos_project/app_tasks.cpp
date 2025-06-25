@@ -15,6 +15,11 @@
 #include <cstdlib>
 #include <cmath>
 
+#include "callback_modules/config_array_module.h"
+#include "callback_modules/ConfigManager.h"
+#include "callback_modules/ConfigManager.h"
+
+
 //-----------------------------------------------------------------------
 // 1. Instância única do automato + mutex (exclusão mútua)
 //-----------------------------------------------------------------------

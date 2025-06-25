@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_5zyqEBWNEfCsWNSrXEOAFQ" specification="// Use the event driven execution model.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'.&#xA;@EventDriven&#xA;&#xA;// Use @SuperSteps(yes) to enable&#xA;// super step semantics.&#xA;@SuperSteps(no)&#xA;&#xA;interface:&#xA;    in event start_program&#xA;&#x9;in event use_default&#xA;&#x9;in event reset_default    &#xA;    in event create_new&#xA;    in event cancel&#xA;    in event int_received&#xA;    in event undo&#xA;    &#xA;    in event Add&#xA;&#xA;    in event config&#xA;    in event ready&#xA;    in event timer_trigger&#xA;    &#xA;&#x9;in event heater_on&#xA;&#x9;in event heater_off&#xA;&#x9;in event mixer_on&#xA;&#x9;in event mixer_off&#xA;&#xA;    // sensors&#xA;    var current_temp: integer&#xA;    var current_duration: integer&#xA;    var step_count: integer&#xA;    &#xA;&#xA;    var currentCurve: integer = 0&#xA;&#xA;    operation heater(on: boolean)&#xA;    operation mixer(on: boolean)&#xA;&#xA;   &#xA;&#xA;    &#xA;    operation  configUART()&#xA;&#x9;operation  configGPIO()&#xA;&#x9;&#xA;&#x9;operation  writeUartString(msg:string)&#xA;&#x9;operation  writeUartInt(value : integer)&#xA;&#x9;&#xA;&#x9;operation  writeHeater(value:integer)&#xA;&#xA;&#xA; &#x9;operation op_getUartInt(): integer&#xA; &#x9;&#xA;&#x9;operation op_InitConfig()&#xA;&#x9;operation op_LoadConfigFromFlash()&#xA;&#x9;operation op_SaveConfigToFlash()&#xA;&#x9;operation op_ClearFlashConfig()&#xA;&#x9;operation op_ResetToFactory()&#xA;&#xA;&#x9;operation op_PushStep(temp: integer, duration: integer)&#xA;&#x9;operation op_PopStep()&#xA;&#x9;operation op_ClearSteps()&#xA;&#x9;operation op_PrintConfig()&#xA;&#x9;&#xA;&#xA;&#x9;operation op_GetStepCount(): integer&#xA;&#x9;operation op_GetTemperature(idx: integer): integer&#xA;&#x9;operation op_GetDuration(idx: integer): integer&#xA;&#x9;&#xA;&#x9;operation op_TimerInit()&#xA;&#x9;operation op_StartTimer(seconds: integer)&#xA;&#x9;operation op_StopTimer()&#xA;&#x9;operation op_IsTimerRunning(): boolean&#xA;&#x9;&#xA;&#x9;&#xA;&#x9;operation op_SetTemperature(idx: integer): integer&#xA;&#x9;&#xA;&#x9;" name="Statechart">
+  <sgraph:Statechart xmi:id="_5zyqEBWNEfCsWNSrXEOAFQ" specification="// Use the event driven execution model.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'.&#xA;@EventDriven&#xA;&#xA;// Use @SuperSteps(yes) to enable&#xA;// super step semantics.&#xA;@SuperSteps(no)&#xA;&#xA;interface:&#xA;    in event start_program&#xA;&#x9;in event use_default&#xA;&#x9;in event reset_default    &#xA;    in event create_new&#xA;    in event cancel&#xA;    in event int_received&#xA;    in event undo&#xA;&#xA;    in event Add&#xA;&#xA;    in event config&#xA;    in event ready&#xA;    in event timer_trigger&#xA;    &#xA;&#x9;in event heater_on&#xA;&#x9;in event heater_off&#xA;&#x9;in event mixer_on&#xA;&#x9;in event mixer_off&#xA;&#xA;    // sensors&#xA;    var current_temp: integer&#xA;    var current_duration: integer&#xA;    var step_count: integer&#xA;    &#xA;&#xA;    var currentCurve: integer = 0&#xA;&#xA;&#xA;    // operations&#xA;    operation  configUART()&#xA;&#x9;operation  configGPIO()&#xA;&#x9;&#xA;&#x9;operation  writeUartString(msg:string)&#xA;&#x9;operation  writeUartInt(value : integer)&#xA;&#x9;&#xA;&#x9;operation  writeHeater(value:integer)&#xA;&#x9;operation  writeMixer(value:integer)&#xA;&#xA;&#xA;&#xA; &#x9;operation op_getUartInt(): integer&#xA; &#x9;&#xA;&#x9;operation op_InitConfig()&#xA;&#x9;operation op_LoadConfigFromFlash()&#xA;&#x9;operation op_SaveConfigToFlash()&#xA;&#x9;operation op_ClearFlashConfig()&#xA;&#x9;operation op_ResetToFactory()&#xA;&#xA;&#x9;operation op_PushStep(temp: integer, duration: integer)&#xA;&#x9;operation op_PopStep()&#xA;&#x9;operation op_ClearSteps()&#xA;&#x9;operation op_PrintConfig()&#xA;&#x9;&#xA;&#xA;&#x9;operation op_GetStepCount(): integer&#xA;&#x9;operation op_GetTemperature(idx: integer): integer&#xA;&#x9;operation op_GetDuration(idx: integer): integer&#xA;&#x9;&#xA;&#x9;operation op_TimerInit()&#xA;&#x9;operation op_StartTimer(seconds: integer)&#xA;&#x9;operation op_IsTimerRunning(): boolean&#xA;&#x9;&#xA;&#x9;&#xA;&#x9;operation op_SetTemperature(idx: integer): integer&#xA;&#x9;&#xA;&#x9;" name="Statechart">
     <regions xmi:id="_IoxWYDUAEfCR4K-5TcEfKQ" name="Brewer">
       <vertices xsi:type="sgraph:State" xmi:id="_SR5z0DUAEfCR4K-5TcEfKQ" specification="entry / writeUartString(&quot;default: utilizar curva default /n new: configurar nova curva /n reset: reiniciar curva default&quot;)" name="IDLE" incomingTransitions="_8cma0DUHEfCR4K-5TcEfKQ _B19WIEfVEfCkKIQHqmIPfw _H9ijIFG_EfC4aK_Yv2pntw _8QwVoFHvEfC4aK_Yv2pntw">
         <outgoingTransitions xmi:id="_H_CmUDaUEfCAh_xL2XInFg" specification="use_default" target="_3z4-0EfVEfCkKIQHqmIPfw"/>
@@ -49,10 +49,10 @@
               <vertices xsi:type="sgraph:Entry" xmi:id="_yWZC4DaTEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_9Rih0DaTEfCAh_xL2XInFg" specification="" target="_xBK8YDaTEfCAh_xL2XInFg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_kpPg8DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeHeater(0)" name="Start Mix" incomingTransitions="_nmvM0DaUEfCAh_xL2XInFg">
+              <vertices xsi:type="sgraph:State" xmi:id="_kpPg8DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeMixer(1)" name="Start Mix" incomingTransitions="_nmvM0DaUEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_oC4WQDaUEfCAh_xL2XInFg" specification="" target="_wOOcgDaTEfCAh_xL2XInFg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_u7cwkDaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeHeater(0)" name="Stop mix" incomingTransitions="_wQJSoDaUEfCAh_xL2XInFg">
+              <vertices xsi:type="sgraph:State" xmi:id="_u7cwkDaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeMixer(0)" name="Stop mix" incomingTransitions="_wQJSoDaUEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_wwUngDaUEfCAh_xL2XInFg" specification="" target="_xBK8YDaTEfCAh_xL2XInFg"/>
               </vertices>
             </regions>
@@ -394,7 +394,7 @@
                           <styles xsi:type="notation:ShapeStyle" xmi:id="_2CgDz1HvEfC4aK_Yv2pntw" fontName="Verdana" fillColor="15720400" lineColor="12632256"/>
                           <styles xsi:type="notation:FontStyle" xmi:id="_2CgD0FHvEfC4aK_Yv2pntw"/>
                           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_2CgD0VHvEfC4aK_Yv2pntw" name="isHorizontal" booleanValue="true"/>
-                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_2CgD0lHvEfC4aK_Yv2pntw" x="222" y="241" width="332" height="70"/>
+                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_2CgD0lHvEfC4aK_Yv2pntw" x="223" y="241" width="344" height="70"/>
                         </children>
                         <children xmi:id="_2CgD01HvEfC4aK_Yv2pntw" type="State" element="_u7cwkDaUEfCAh_xL2XInFg">
                           <children xsi:type="notation:DecorationNode" xmi:id="_2CgD1FHvEfC4aK_Yv2pntw" type="StateName">
@@ -410,7 +410,7 @@
                           <styles xsi:type="notation:ShapeStyle" xmi:id="_2CgD21HvEfC4aK_Yv2pntw" fontName="Verdana" fillColor="15720400" lineColor="12632256"/>
                           <styles xsi:type="notation:FontStyle" xmi:id="_2CgD3FHvEfC4aK_Yv2pntw"/>
                           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_2CgD3VHvEfC4aK_Yv2pntw" name="isHorizontal" booleanValue="true"/>
-                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_2CgD3lHvEfC4aK_Yv2pntw" x="-1" y="154" width="321" height="58"/>
+                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_2CgD3lHvEfC4aK_Yv2pntw" y="154" width="334" height="63"/>
                         </children>
                         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_2CgD31HvEfC4aK_Yv2pntw"/>
                       </children>
@@ -829,11 +829,11 @@
     <edges xmi:id="_7M3UUTaTEfCAh_xL2XInFg" type="Transition" element="_7M3UUDaTEfCAh_xL2XInFg" source="_jiGhkDUGEfCR4K-5TcEfKQ" target="_p6SZQDaTEfCAh_xL2XInFg">
       <children xsi:type="notation:DecorationNode" xmi:id="_7M3UVTaTEfCAh_xL2XInFg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_7M3UVjaTEfCAh_xL2XInFg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_7M3UVzaTEfCAh_xL2XInFg" x="927" y="10"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_7M3UVzaTEfCAh_xL2XInFg" x="11" y="-10"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_7M3UUjaTEfCAh_xL2XInFg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_7M3UVDaTEfCAh_xL2XInFg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_7M3UUzaTEfCAh_xL2XInFg" points="[-1344, -92, -1403, -298]$[-1626, -92, -1685, -298]$[-1626, 496, -1685, 290]$[-14, 496, -73, 290]$[-14, 221, -73, 15]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_7M3UUzaTEfCAh_xL2XInFg" points="[-1344, -92, -1403, -298]$[-1626, -92, -1685, -298]$[-1626, 433, -1685, 227]$[-14, 433, -73, 227]$[-14, 221, -73, 15]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_7M3UWDaTEfCAh_xL2XInFg" id="(0.9956331877729258,0.6214574898785425)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_7M3UWTaTEfCAh_xL2XInFg" id="(0.5845070422535211,0.8648648648648649)"/>
     </edges>
@@ -875,7 +875,7 @@
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_nmvM0jaUEfCAh_xL2XInFg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_nmvM1DaUEfCAh_xL2XInFg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_nmvM0zaUEfCAh_xL2XInFg" points="[7, -10, -15, 59]$[70, -10, 48, 59]$[70, -66, 48, 3]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_nmvM0zaUEfCAh_xL2XInFg" points="[7, -10, -20, 59]$[70, -10, 43, 59]$[70, -66, 43, 3]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nmvM2DaUEfCAh_xL2XInFg" id="(0.9391304347826087,0.4262295081967213)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nmvM2TaUEfCAh_xL2XInFg" id="(0.3235294117647059,0.9622641509433962)"/>
     </edges>
@@ -886,7 +886,7 @@
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_oC4WQjaUEfCAh_xL2XInFg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_oC4WRDaUEfCAh_xL2XInFg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_oC4WQzaUEfCAh_xL2XInFg" points="[38, -6, 82, 189]$[38, -158, 82, 37]$[-17, -158, 27, 37]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_oC4WQzaUEfCAh_xL2XInFg" points="[33, -6, 82, 189]$[33, -158, 82, 37]$[-22, -158, 27, 37]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_oDBgMDaUEfCAh_xL2XInFg" id="(0.35294117647058826,0.09433962264150944)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_oDBgMTaUEfCAh_xL2XInFg" id="(0.7906976744186046,0.425)"/>
     </edges>
@@ -904,21 +904,21 @@
     <edges xmi:id="_wQJSoTaUEfCAh_xL2XInFg" type="Transition" element="_wQJSoDaUEfCAh_xL2XInFg" source="_2CgDpVHvEfC4aK_Yv2pntw" target="_2CgD01HvEfC4aK_Yv2pntw">
       <children xsi:type="notation:DecorationNode" xmi:id="_wQJSpTaUEfCAh_xL2XInFg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_wQJSpjaUEfCAh_xL2XInFg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_wQJSpzaUEfCAh_xL2XInFg" x="7" y="-1"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_wQJSpzaUEfCAh_xL2XInFg" x="6" y="-1"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_wQJSojaUEfCAh_xL2XInFg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_wQJSpDaUEfCAh_xL2XInFg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_wQJSozaUEfCAh_xL2XInFg" points="[-4, -10, 34, -125]$[-39, -10, -1, -125]$[-39, 86, -1, -29]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_wQJSozaUEfCAh_xL2XInFg" points="[-4, -10, 26, -127]$[-38, -10, -8, -127]$[-38, 86, -8, -31]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_wQJSqDaUEfCAh_xL2XInFg" id="(0.031007751937984496,0.625)"/>
     </edges>
     <edges xmi:id="_wwUngTaUEfCAh_xL2XInFg" type="Transition" element="_wwUngDaUEfCAh_xL2XInFg" source="_2CgD01HvEfC4aK_Yv2pntw" target="_2CgDsVHvEfC4aK_Yv2pntw">
       <children xsi:type="notation:DecorationNode" xmi:id="_wwUnhTaUEfCAh_xL2XInFg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_wwUnhjaUEfCAh_xL2XInFg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_wwUnhzaUEfCAh_xL2XInFg" x="44" y="-12"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_wwUnhzaUEfCAh_xL2XInFg" x="43" y="-12"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_wwUngjaUEfCAh_xL2XInFg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_wwUnhDaUEfCAh_xL2XInFg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_wwUngzaUEfCAh_xL2XInFg" points="[-2, 29, -45, -187]$[-2, 179, -45, -37]$[40, 179, -3, -37]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_wwUngzaUEfCAh_xL2XInFg" points="[-9, 32, -44, -182]$[-9, 177, -44, -37]$[32, 177, -3, -37]"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_wwUniDaUEfCAh_xL2XInFg" id="(0.02608695652173913,0.7868852459016393)"/>
     </edges>
     <edges xmi:id="_0a1KYTaUEfCAh_xL2XInFg" type="Transition" element="_0a1KYDaUEfCAh_xL2XInFg" source="_f5BIozaTEfCAh_xL2XInFg" target="_y00O0zaUEfCAh_xL2XInFg">
