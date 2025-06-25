@@ -1,7 +1,7 @@
-// app_tasks.cpp – Tarefas FreeRTOS com statechart thread‑safe
+// app_tasks.cpp – Tarefas FreeRTOS com statechart thread‑safe (C++ linkage)
 // ----------------------------------------------------------------------
-//  • Cada tarefa levanta evento diretamente (mutex no automato)           
-//  • Novo TimerTask substitui TimerService: controla cronômetro 1 s       
+//  • Cada tarefa levanta evento diretamente; automato protegido por mutex
+//  • TimerTask implementa cronômetro via operações op_Timer*             
 //-----------------------------------------------------------------------
 
 #include "freertos/FreeRTOS.h"
@@ -16,7 +16,7 @@
 #include <cmath>
 
 //-----------------------------------------------------------------------
-// 1. Instância única do automato + mutex
+// 1. Instância única do automato + mutex (exclusão mútua)
 //-----------------------------------------------------------------------
 static BrewingStatemachine sc;
 static SemaphoreHandle_t   scMutex = nullptr;
@@ -48,32 +48,32 @@ static void raiseEvent(uint16_t id) {
 }
 
 //-----------------------------------------------------------------------
-// 2. Variável global para último inteiro UART + operation
+// 2. UART – último inteiro recebido + operation op_getUartInt()
 //-----------------------------------------------------------------------
 static int32_t g_lastUartInt = 0;
-extern "C" int32_t op_getUartInt() { return g_lastUartInt; }
+int32_t op_getUartInt() { return g_lastUartInt; }
 
 //-----------------------------------------------------------------------
-// 3. TimerTask – cronômetro em segundos controlado por operations
+// 3. TimerTask – cronômetro controlado por operations
 //-----------------------------------------------------------------------
 static volatile uint32_t timerSecRemaining = 0;
 static volatile bool     timerRunning      = false;
 
-extern "C" void op_TimerInit() {
+void op_TimerInit() {
     timerRunning = false;
     timerSecRemaining = 0;
 }
 
-extern "C" void op_StartTimer(int32_t seconds) {
+void op_StartTimer(int32_t seconds) {
     if (seconds > 0) {
-        timerSecRemaining = seconds;
+        timerSecRemaining = static_cast<uint32_t>(seconds);
         timerRunning      = true;
     } else {
         timerRunning = false;
     }
 }
 
-extern "C" bool op_IsTimerRunning() {
+bool op_IsTimerRunning() {
     return timerRunning;
 }
 
@@ -97,11 +97,11 @@ static float currentSetpoint = NAN;
 static bool  heaterOn = false;
 static bool  mixerOn  = false;
 
-extern "C" void op_SetTemperature(int idx) {
+void op_SetTemperature(int idx) {
     currentSetpoint = ConfigManager::getTemperature(idx);
 }
 
-static float readSensor(uint8_t addr) { return 25.0f; /* TODO: I2C real */ }
+static float readSensor(uint8_t addr) { return 25.0f; /* TODO: I²C real */ }
 
 static void TemperatureTask(void* pv) {
     const TickType_t period = pdMS_TO_TICKS(1000);
@@ -142,26 +142,34 @@ static void parseLine(char* line) {
     while(len && (line[len-1]=='\r'||line[len-1]=='\n'||line[len-1]==' ')) line[--len]='\0';
     if(!len) return;
 
-    for(const CmdMap* c=cmdTable; c->cmd; ++c){ if(!strcasecmp(line,c->cmd)){ raiseEvent(c->evt); return; }}
+    for(const CmdMap* c=cmdTable; c->cmd; ++c) {
+        if(!strcasecmp(line,c->cmd)) { raiseEvent(c->evt); return; }
+    }
 
     char* end; long v=strtol(line,&end,10);
-    if(*end=='\0') { g_lastUartInt = static_cast<int32_t>(v); raiseEvent(EVENT_INT_RECEIVED); }
-    else            uart_send("Comando desconhecido\r\n");
+    if(*end=='\0') {
+        g_lastUartInt = static_cast<int32_t>(v);
+        raiseEvent(EVENT_INT_RECEIVED);
+    } else {
+        uart_send("Comando desconhecido\r\n");
+    }
 }
 
 static void UartTask(void* pv) {
     char buf[64]; size_t idx=0;
     for(;;) {
         if(uart_available()) {
-            int c=uart_read();
+            int c = uart_read();
             if(c=='\n'||c=='\r') { buf[idx]='\0'; parseLine(buf); idx=0; }
-            else if(idx<sizeof(buf)-1) buf[idx++]=static_cast<char>(c);
-        } else vTaskDelay(pdMS_TO_TICKS(10));
+            else if(idx<sizeof(buf)-1) buf[idx++] = static_cast<char>(c);
+        } else {
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
     }
 }
 
 //-----------------------------------------------------------------------
-// 6. app_main – inicializa e cria tasks
+// 6. app_main – ponto de entrada (mantém extern "C" para o ESP‑IDF)
 //-----------------------------------------------------------------------
 extern "C" void app_main() {
     scMutex = xSemaphoreCreateMutex();
@@ -171,9 +179,9 @@ extern "C" void app_main() {
     sc.init();
     sc.enter();
 
-    op_TimerInit(); // garante timer zerado
+    op_TimerInit(); // cronômetro zerado
 
-    xTaskCreate(TimerTask,      "TimerTask", 2048, nullptr, 5, nullptr); // alta prioridade
-    xTaskCreate(TemperatureTask,"TempTask",  4096, nullptr, 4, nullptr);
-    xTaskCreate(UartTask,       "UartTask",  4096, nullptr, 3, nullptr);
+    xTaskCreate(TimerTask,      "TimerTask",  2048, nullptr, 5, nullptr);
+    xTaskCreate(TemperatureTask,"TempTask",   4096, nullptr, 4, nullptr);
+    xTaskCreate(UartTask,       "UartTask",   4096, nullptr, 3, nullptr);
 }
