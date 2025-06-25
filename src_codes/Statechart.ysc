@@ -16,7 +16,7 @@
                 <outgoingTransitions xmi:id="_L9F3wDUJEfCR4K-5TcEfKQ" specification="int_received" target="_uCIx0DUGEfCR4K-5TcEfKQ"/>
                 <outgoingTransitions xmi:id="_6jIHQFHQEfC4aK_Yv2pntw" specification="undo" target="_t9JeMFHQEfC4aK_Yv2pntw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_uCIx0DUGEfCR4K-5TcEfKQ" specification="  entry  / current_temp = getUartInt()&#xD;&#xA;" name="set_Temp" incomingTransitions="_L9F3wDUJEfCR4K-5TcEfKQ">
+              <vertices xsi:type="sgraph:State" xmi:id="_uCIx0DUGEfCR4K-5TcEfKQ" specification="  entry  / current_temp = op_getUartInt()&#xD;&#xA;" name="set_Temp" incomingTransitions="_L9F3wDUJEfCR4K-5TcEfKQ">
                 <outgoingTransitions xmi:id="_rbVFsEfgEfCkKIQHqmIPfw" specification="" target="_QBgbwFHOEfC4aK_Yv2pntw"/>
               </vertices>
               <vertices xsi:type="sgraph:Entry" xmi:id="_cAnoEEcYEfCOC4AloxxqRg">
