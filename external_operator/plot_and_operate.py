@@ -2,11 +2,7 @@
 
 Receives messages from an ESP32 over the serial port and:
 • Prints LOG messages to the console.
-• Prints ERROR messages in red (requires `colorama`).
 • Parses DATA-Y-Z-K messages and plots Y, Z, K in real time.
-
-Dependencies:
-    pip install pyserial matplotlib colorama  # colorama optional
 
 Run with:
     python plot_and_operate.py --port COM3 --baud 115200
@@ -22,13 +18,10 @@ from collections import deque
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
+import matplotlib
 
-try:
-    from colorama import init, Fore, Style as CStyle
-    init(autoreset=True)
-    COLORAMA = True
-except ImportError:
-    COLORAMA = False
+matplotlib.use("TkAgg")
+
 
 # ----------------------- Serial Reader Thread ----------------------- #
 class SerialReader(threading.Thread):
@@ -115,9 +108,6 @@ def live_plot(port: str, baud: int, max_pts: int = 200):
             if kind == "log":
                 print(f"[LOG] {payload}")
             elif kind == "error":
-                if COLORAMA:
-                    print(Fore.RED + payload + CStyle.RESET_ALL)
-                else:
                     print(payload)
             elif kind == "data":
                 y, z, k = payload
@@ -135,7 +125,14 @@ def live_plot(port: str, baud: int, max_pts: int = 200):
             ax.set_xlim(xs[0], xs[-1] + 1)
         return line_y, line_z, line_k
 
-    ani = animation.FuncAnimation(fig, update, interval=100, blit=True)
+    ani = animation.FuncAnimation(
+        fig, update,
+        interval=100,
+        blit=True,
+        save_count=200,        # = max_pts   → mantém cache limitado
+        # — ou, se quiser zero cache —
+        # cache_frame_data=False
+    )
 
     try:
         plt.show()
@@ -147,7 +144,7 @@ def live_plot(port: str, baud: int, max_pts: int = 200):
 def main():
     parser = argparse.ArgumentParser(description="ESP32 serial plot application")
     parser.add_argument("--port", default="COM3", help="Serial port (e.g. COM3 or /dev/ttyUSB0)")
-    parser.add_argument("--baud", type=int, default=115200, help="Baud rate")
+    parser.add_argument("--baud", type=int, default=9600, help="Baud rate")
     args = parser.parse_args()
     live_plot(args.port, args.baud)
 

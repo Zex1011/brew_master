@@ -2,7 +2,7 @@
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
   <sgraph:Statechart xmi:id="_5zyqEBWNEfCsWNSrXEOAFQ" specification="// Use the event driven execution model.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'.&#xA;@EventDriven&#xA;&#xA;// Use @SuperSteps(yes) to enable&#xA;// super step semantics.&#xA;@SuperSteps(no)&#xA;&#xA;interface:&#xA;    in event start_program&#xA;&#x9;in event use_default&#xA;&#x9;in event reset_default    &#xA;    in event create_new&#xA;    in event cancel&#xA;    in event int_received&#xA;    in event undo&#xA;&#xA;    in event Add&#xA;&#xA;    in event config&#xA;    in event ready&#xA;    in event timer_trigger&#xA;    &#xA;&#x9;in event heater_on&#xA;&#x9;in event heater_off&#xA;&#x9;in event mixer_on&#xA;&#x9;in event mixer_off&#xA;&#xA;    // sensors&#xA;    var current_temp: integer&#xA;    var current_duration: integer&#xA;    var step_count: integer&#xA;    &#xA;&#xA;    var currentCurve: integer = 0&#xA;&#xA;&#xA;    // operations&#xA;    operation  configUART()&#xA;&#x9;operation  configGPIO()&#xA;&#x9;&#xA;&#x9;operation  writeUartString(msg:string)&#xA;&#x9;operation  writeUartInt(value : integer)&#xA;&#x9;&#xA;&#x9;operation  writeHeater(value:integer)&#xA;&#x9;operation  writeMixer(value:integer)&#xA;&#xA;&#xA;&#xA; &#x9;operation op_getUartInt(): integer&#xA; &#x9;&#xA;&#x9;operation op_InitConfig()&#xA;&#x9;operation op_LoadConfigFromFlash()&#xA;&#x9;operation op_SaveConfigToFlash()&#xA;&#x9;operation op_ClearFlashConfig()&#xA;&#x9;operation op_ResetToFactory()&#xA;&#xA;&#x9;operation op_PushStep(temp: integer, duration: integer)&#xA;&#x9;operation op_PopStep()&#xA;&#x9;operation op_ClearSteps()&#xA;&#x9;operation op_PrintConfig()&#xA;&#x9;&#xA;&#xA;&#x9;operation op_GetStepCount(): integer&#xA;&#x9;operation op_GetTemperature(idx: integer): integer&#xA;&#x9;operation op_GetDuration(idx: integer): integer&#xA;&#x9;&#xA;&#x9;operation op_TimerInit()&#xA;&#x9;operation op_StartTimer(seconds: integer)&#xA;&#x9;operation op_IsTimerRunning(): boolean&#xA;&#x9;&#xA;&#x9;&#xA;&#x9;operation op_SetTemperature(idx: integer): integer&#xA;&#x9;&#xA;&#x9;" name="Statechart">
     <regions xmi:id="_IoxWYDUAEfCR4K-5TcEfKQ" name="Brewer">
-      <vertices xsi:type="sgraph:State" xmi:id="_SR5z0DUAEfCR4K-5TcEfKQ" specification="entry / writeUartString(&quot;default: utilizar curva default /n new: configurar nova curva /n reset: reiniciar curva default&quot;)" name="IDLE" incomingTransitions="_8cma0DUHEfCR4K-5TcEfKQ _B19WIEfVEfCkKIQHqmIPfw _H9ijIFG_EfC4aK_Yv2pntw _8QwVoFHvEfC4aK_Yv2pntw">
+      <vertices xsi:type="sgraph:State" xmi:id="_SR5z0DUAEfCR4K-5TcEfKQ" specification="entry / writeUartString(&quot;log-default: utilizar curva default /n new: configurar nova curva /n reset: reiniciar curva default&quot;)" name="IDLE" incomingTransitions="_8cma0DUHEfCR4K-5TcEfKQ _B19WIEfVEfCkKIQHqmIPfw _H9ijIFG_EfC4aK_Yv2pntw _8QwVoFHvEfC4aK_Yv2pntw">
         <outgoingTransitions xmi:id="_H_CmUDaUEfCAh_xL2XInFg" specification="use_default" target="_3z4-0EfVEfCkKIQHqmIPfw"/>
         <outgoingTransitions xmi:id="_UVHWEFG6EfC4aK_Yv2pntw" specification="create_new" target="_mSkooDUHEfCR4K-5TcEfKQ"/>
         <outgoingTransitions xmi:id="_G4Y48FG_EfC4aK_Yv2pntw" specification="reset_default" target="_FC9BUFG_EfC4aK_Yv2pntw"/>
@@ -12,7 +12,7 @@
         <regions xmi:id="_mSkoozUHEfCR4K-5TcEfKQ" name="r1">
           <vertices xsi:type="sgraph:State" xmi:id="_T-1PsDUAEfCR4K-5TcEfKQ" specification="" name="CONFIG" incomingTransitions="__hqHQDUHEfCR4K-5TcEfKQ">
             <regions xmi:id="_T-1PszUAEfCR4K-5TcEfKQ" name="Config">
-              <vertices xsi:type="sgraph:State" xmi:id="_twwG4DUGEfCR4K-5TcEfKQ" specification="entry /&#xD;&#xA;  writeUartString(&quot;INFORME A TEMPERATURA DA ETAPA &quot;);&#xD;&#xA;  writeUartInt(op_GetStepCount())&#xD;&#xA;" name="WaitTemp" incomingTransitions="_dQHhEEcYEfCOC4AloxxqRg _i7D7sFHOEfC4aK_Yv2pntw _7f15EFHOEfC4aK_Yv2pntw">
+              <vertices xsi:type="sgraph:State" xmi:id="_twwG4DUGEfCR4K-5TcEfKQ" specification="entry /&#xD;&#xA;  writeUartString(&quot;log-INFORME A TEMPERATURA DA ETAPA &quot;);&#xD;&#xA;  writeUartInt(op_GetStepCount())&#xD;&#xA;" name="WaitTemp" incomingTransitions="_dQHhEEcYEfCOC4AloxxqRg _i7D7sFHOEfC4aK_Yv2pntw _7f15EFHOEfC4aK_Yv2pntw">
                 <outgoingTransitions xmi:id="_L9F3wDUJEfCR4K-5TcEfKQ" specification="int_received" target="_uCIx0DUGEfCR4K-5TcEfKQ"/>
                 <outgoingTransitions xmi:id="_6jIHQFHQEfC4aK_Yv2pntw" specification="undo" target="_t9JeMFHQEfC4aK_Yv2pntw"/>
               </vertices>
@@ -22,16 +22,16 @@
               <vertices xsi:type="sgraph:Entry" xmi:id="_cAnoEEcYEfCOC4AloxxqRg">
                 <outgoingTransitions xmi:id="_dQHhEEcYEfCOC4AloxxqRg" specification="" target="_twwG4DUGEfCR4K-5TcEfKQ"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_jYScUEfgEfCkKIQHqmIPfw" specification="entry / op_PushStep(current_temp, current_duration);&#xD;&#xA;writeUartString(&quot;add: adicionar nova curva.&#xD;&#xA;/n undo: remover curva anterior &#xD;&#xA;/n ready: começar o processo, &#xD;&#xA;/n cancel: sair da configuração&quot;)" name="buildConfig" incomingTransitions="_1wS8UFHOEfC4aK_Yv2pntw">
+              <vertices xsi:type="sgraph:State" xmi:id="_jYScUEfgEfCkKIQHqmIPfw" specification="entry / op_PushStep(current_temp, current_duration);&#xD;&#xA;writeUartString(&quot;log-add: adicionar nova curva.&#xD;&#xA;/n undo: remover curva anterior &#xD;&#xA;/n ready: começar o processo, &#xD;&#xA;/n cancel: sair da configuração&quot;)" name="buildConfig" incomingTransitions="_1wS8UFHOEfC4aK_Yv2pntw">
                 <outgoingTransitions xmi:id="_og4GwEfgEfCkKIQHqmIPfw" specification="ready" target="_KJ4CkFHlEfC4aK_Yv2pntw"/>
                 <outgoingTransitions xmi:id="_7f15EFHOEfC4aK_Yv2pntw" specification="Add" target="_twwG4DUGEfCR4K-5TcEfKQ"/>
                 <outgoingTransitions xmi:id="_vJNosFHQEfC4aK_Yv2pntw" specification="undo" target="_t9JeMFHQEfC4aK_Yv2pntw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_QBgbwFHOEfC4aK_Yv2pntw" specification="entry /&#xD;&#xA;  writeUartString(&quot;INFORME A DURACAO DA ETAPA &quot;);&#xD;&#xA;  writeUartInt(op_GetStepCount())&#xD;&#xA;" name="WaitDuration" incomingTransitions="_rbVFsEfgEfCkKIQHqmIPfw">
+              <vertices xsi:type="sgraph:State" xmi:id="_QBgbwFHOEfC4aK_Yv2pntw" specification="entry /&#xD;&#xA;  writeUartString(&quot;log-INFORME A DURACAO DA ETAPA &quot;);&#xD;&#xA;  writeUartInt(op_GetStepCount())&#xD;&#xA;" name="WaitDuration" incomingTransitions="_rbVFsEfgEfCkKIQHqmIPfw">
                 <outgoingTransitions xmi:id="_i7D7sFHOEfC4aK_Yv2pntw" specification="undo" target="_twwG4DUGEfCR4K-5TcEfKQ"/>
                 <outgoingTransitions xmi:id="_wi0x4FHOEfC4aK_Yv2pntw" specification="int_received" target="_TAbrAFHOEfC4aK_Yv2pntw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_TAbrAFHOEfC4aK_Yv2pntw" specification="  entry  / current_duration = getUartInt()&#xD;&#xA;" name="set_Duration" incomingTransitions="_wi0x4FHOEfC4aK_Yv2pntw">
+              <vertices xsi:type="sgraph:State" xmi:id="_TAbrAFHOEfC4aK_Yv2pntw" specification="  entry  / current_duration = op_getUartInt()&#xD;&#xA;" name="set_Duration" incomingTransitions="_wi0x4FHOEfC4aK_Yv2pntw">
                 <outgoingTransitions xmi:id="_1wS8UFHOEfC4aK_Yv2pntw" specification="" target="_jYScUEfgEfCkKIQHqmIPfw"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_t9JeMFHQEfC4aK_Yv2pntw" specification="entry / op_PopStep()" name="undo_step" incomingTransitions="_vJNosFHQEfC4aK_Yv2pntw _6jIHQFHQEfC4aK_Yv2pntw"/>
@@ -49,10 +49,10 @@
               <vertices xsi:type="sgraph:Entry" xmi:id="_yWZC4DaTEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_9Rih0DaTEfCAh_xL2XInFg" specification="" target="_xBK8YDaTEfCAh_xL2XInFg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_kpPg8DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeMixer(1)" name="Start Mix" incomingTransitions="_nmvM0DaUEfCAh_xL2XInFg">
+              <vertices xsi:type="sgraph:State" xmi:id="_kpPg8DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;log-mix Ligado&quot;);&#xD;&#xA;writeMixer(1)" name="Start Mix" incomingTransitions="_nmvM0DaUEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_oC4WQDaUEfCAh_xL2XInFg" specification="" target="_wOOcgDaTEfCAh_xL2XInFg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_u7cwkDaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeMixer(0)" name="Stop mix" incomingTransitions="_wQJSoDaUEfCAh_xL2XInFg">
+              <vertices xsi:type="sgraph:State" xmi:id="_u7cwkDaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;log-mix Desligado&quot;);&#xD;&#xA;writeMixer(0)" name="Stop mix" incomingTransitions="_wQJSoDaUEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_wwUngDaUEfCAh_xL2XInFg" specification="" target="_xBK8YDaTEfCAh_xL2XInFg"/>
               </vertices>
             </regions>
@@ -66,10 +66,10 @@
               <vertices xsi:type="sgraph:Entry" xmi:id="_k65HEDaTEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_HXC_gFHuEfC4aK_Yv2pntw" specification="" target="_OQL7MFHmEfC4aK_Yv2pntw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_pC7eADaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeHeater(0)" name="Stop_heating" incomingTransitions="_cQ7_gFHuEfC4aK_Yv2pntw">
+              <vertices xsi:type="sgraph:State" xmi:id="_pC7eADaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;log-Aquecimento Desligado&quot;);&#xD;&#xA;writeHeater(0)" name="Stop_heating" incomingTransitions="_cQ7_gFHuEfC4aK_Yv2pntw">
                 <outgoingTransitions xmi:id="_q5ZQYDaUEfCAh_xL2XInFg" specification="" target="_f5BIoDaTEfCAh_xL2XInFg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_y00O0DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;Aquecimento Ligado&quot;);&#xD;&#xA;writeHeater(1)" name="Start_heating" incomingTransitions="_0a1KYDaUEfCAh_xL2XInFg">
+              <vertices xsi:type="sgraph:State" xmi:id="_y00O0DaUEfCAh_xL2XInFg" specification="entry / writeUartString(&quot;log-Aquecimento Ligado&quot;);&#xD;&#xA;writeHeater(1)" name="Start_heating" incomingTransitions="_0a1KYDaUEfCAh_xL2XInFg">
                 <outgoingTransitions xmi:id="_bn30YFHuEfC4aK_Yv2pntw" specification="" target="_XaB68FHuEfC4aK_Yv2pntw"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_OQL7MFHmEfC4aK_Yv2pntw" specification="entry / writeUartString(&quot;\nTemperatura: &quot;);&#xD;&#xA;  writeUartInt(current_temp);&#xD;&#xA;  writeUartString(&quot;\nDuração: &quot;);&#xD;&#xA;  writeUartInt(current_duration)&#xD;&#xA;" name="current_curve" incomingTransitions="_HXC_gFHuEfC4aK_Yv2pntw">
@@ -99,7 +99,7 @@
           <vertices xsi:type="sgraph:State" xmi:id="_KJ4CkFHlEfC4aK_Yv2pntw" specification="entry / currentCurve = 0;&#xD;&#xA;step_count = op_GetStepCount()" name="READY" incomingTransitions="_og4GwEfgEfCkKIQHqmIPfw _DNyDsEfgEfCkKIQHqmIPfw">
             <outgoingTransitions xmi:id="_2TiK0DUHEfCR4K-5TcEfKQ" specification="&#xD;&#xA;" target="_C7ZCoFHlEfC4aK_Yv2pntw"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_t01DIFHlEfC4aK_Yv2pntw" specification="entry / writeUartString(&quot;PROCESSO FINALIZADO&quot;)" name="END_PROCESS" incomingTransitions="_z2it8FHlEfC4aK_Yv2pntw">
+          <vertices xsi:type="sgraph:State" xmi:id="_t01DIFHlEfC4aK_Yv2pntw" specification="entry / writeUartString(&quot;log-PROCESSO FINALIZADO&quot;)" name="END_PROCESS" incomingTransitions="_z2it8FHlEfC4aK_Yv2pntw">
             <outgoingTransitions xmi:id="_8QwVoFHvEfC4aK_Yv2pntw" specification="" target="_SR5z0DUAEfCR4K-5TcEfKQ"/>
           </vertices>
         </regions>
@@ -122,7 +122,7 @@
       <vertices xsi:type="sgraph:State" xmi:id="_FC9BUFG_EfC4aK_Yv2pntw" specification="entry / op_ResetToFactory()" name="reset_default" incomingTransitions="_G4Y48FG_EfC4aK_Yv2pntw">
         <outgoingTransitions xmi:id="_H9ijIFG_EfC4aK_Yv2pntw" specification="" target="_SR5z0DUAEfCR4K-5TcEfKQ"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_DNjFQFHHEfC4aK_Yv2pntw" name="config_init" incomingTransitions="_gPNaoFHoEfC4aK_Yv2pntw">
+      <vertices xsi:type="sgraph:State" xmi:id="_DNjFQFHHEfC4aK_Yv2pntw" specification="entry / op_InitConfig()" name="config_init" incomingTransitions="_gPNaoFHoEfC4aK_Yv2pntw">
         <outgoingTransitions xmi:id="_B19WIEfVEfCkKIQHqmIPfw" specification="start_program" target="_SR5z0DUAEfCR4K-5TcEfKQ"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_eRGvMFHoEfC4aK_Yv2pntw" specification="entry / op_TimerInit()" name="Timer_config" incomingTransitions="_f4m4gFHoEfC4aK_Yv2pntw">
@@ -759,7 +759,7 @@
           <styles xsi:type="notation:ShapeStyle" xmi:id="_DNkTYVHHEfC4aK_Yv2pntw" fontName="Verdana" fillColor="15720400" lineColor="12632256"/>
           <styles xsi:type="notation:FontStyle" xmi:id="_DNkTYlHHEfC4aK_Yv2pntw"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_DNkTa1HHEfC4aK_Yv2pntw" name="isHorizontal" booleanValue="true"/>
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_DNkTY1HHEfC4aK_Yv2pntw" x="471" y="248" width="140" height="53"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_DNkTY1HHEfC4aK_Yv2pntw" x="453" y="248" width="161" height="53"/>
         </children>
         <children xmi:id="_eRHWQFHoEfC4aK_Yv2pntw" type="State" element="_eRGvMFHoEfC4aK_Yv2pntw">
           <children xsi:type="notation:DecorationNode" xmi:id="_eRHWRFHoEfC4aK_Yv2pntw" type="StateName">
@@ -972,7 +972,7 @@
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_B2HHIUfVEfCkKIQHqmIPfw" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_B2HHI0fVEfCkKIQHqmIPfw" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_B2HHIkfVEfCkKIQHqmIPfw" points="[4, 5, -119, -422]$[4, 407, -119, -20]$[102, 407, -21, -20]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_B2HHIkfVEfCkKIQHqmIPfw" points="[0, 5, -109, -306]$[0, 349, -109, 38]$[88, 349, -21, 38]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_B2TUYEfVEfCkKIQHqmIPfw" id="(0.5785714285714286,0.9056603773584906)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_B2TUYUfVEfCkKIQHqmIPfw" id="(0.12209302325581395,0.3937007874015748)"/>
     </edges>
@@ -1165,11 +1165,11 @@
     <edges xmi:id="_gPOBsFHoEfC4aK_Yv2pntw" type="Transition" element="_gPNaoFHoEfC4aK_Yv2pntw" source="_eRHWQFHoEfC4aK_Yv2pntw" target="_DNkTYFHHEfC4aK_Yv2pntw">
       <children xsi:type="notation:DecorationNode" xmi:id="_gPOBtFHoEfC4aK_Yv2pntw" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_gPOBtVHoEfC4aK_Yv2pntw"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_gPOBtlHoEfC4aK_Yv2pntw" y="10"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_gPOBtlHoEfC4aK_Yv2pntw" x="1" y="10"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_gPOBsVHoEfC4aK_Yv2pntw" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_gPOBs1HoEfC4aK_Yv2pntw" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_gPOBslHoEfC4aK_Yv2pntw" points="[-29, 18, 89, -57]$[-112, 76, 6, 1]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_gPOBslHoEfC4aK_Yv2pntw" points="[-48, 30, 148, -94]$[-48, 117, 148, -7]$[-183, 117, 13, -7]"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_gPOowFHoEfC4aK_Yv2pntw" id="(0.9214285714285714,0.7358490566037735)"/>
     </edges>
     <edges xmi:id="_HXC_gVHuEfC4aK_Yv2pntw" type="Transition" element="_HXC_gFHuEfC4aK_Yv2pntw" source="_k65HETaTEfCAh_xL2XInFg" target="_OQMiQFHmEfC4aK_Yv2pntw">

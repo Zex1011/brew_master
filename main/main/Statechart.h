@@ -10,9 +10,9 @@ class Statechart;
 
 
 #include <deque>
-#include "../src/sc_types.h"
-#include "../src/sc_statemachine.h"
-#include "../src/sc_eventdriven.h"
+#include "sc_types.h"
+#include "sc_statemachine.h"
+#include "sc_eventdriven.h"
 #include <string.h>
 
 /*! \file
