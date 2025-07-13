@@ -8,8 +8,33 @@
 
 #include <stdint.h>
 
-volatile int16_t g_sensor1 = 25;   // temperatura inicial fictícia
-volatile int16_t g_sensor2 = 25;
+// Testando aplicação de I2C
+#include <Wire.h>          // ⬅ importante
+
+/* Endereços I²C - ajuste conforme seus sensores */
+constexpr uint8_t I2C_ADDR_SENSOR1 = 0x08; //teste
+//constexpr uint8_t I2C_ADDR_SENSOR1 = 0x48;
+//constexpr uint8_t I2C_ADDR_SENSOR2 = 0x49;
+
+////
+// Testando aplicação de I2C
+static int16_t readTemp16(uint8_t addr)
+{
+    Wire.beginTransmission(addr);
+    Wire.write(0x00);                // registrador/ponteiro a ler (exemplo)
+    Wire.endTransmission(false);     // *false* mantém o bus ativo (repeated-start)
+
+    Wire.requestFrom(addr, (uint8_t)2);
+    if (Wire.available() < 2) return INT16_MIN;   // erro
+
+    uint8_t msb = Wire.read();
+    uint8_t lsb = Wire.read();
+    return (int16_t)((msb << 8) | lsb);           // formato big-endian, 16 bits
+}
+////
+
+volatile int16_t g_sensor1 = 20;   // temperatura inicial fictícia
+volatile int16_t g_sensor2 = 20;
 
 static Statechart     machine;
 static CallbackModule cb;
@@ -32,6 +57,24 @@ static void TimerTask(void*){
         }
     }
 }
+
+//I2C task
+static void I2CTask(void*)
+{
+    for (;;)
+    {
+        vTaskDelay(pdMS_TO_TICKS(1000));          // 1 s (mesmo período da TempTask)
+
+        int16_t t1 = readTemp16(I2C_ADDR_SENSOR1);
+        //int16_t t2 = readTemp16(I2C_ADDR_SENSOR2);
+
+        if (t1 != INT16_MIN) g_sensor1 = t1;      // atualiza só se leitura OK
+        //if (t2 != INT16_MIN) g_sensor2 = t2;
+    }
+}
+////
+
+
 
 /* ---------- TemperatureTask ---------- */
 // TODO IMPLEMENTAR O CONTROLADOR PARA ATIVAR E DESATIVAR UM EVENTO DE "FORA DE TEMPERATURA"
@@ -160,7 +203,11 @@ void app_tasks_init()          // novo nome
 
     machine.setOperationCallback(&cb);
     machine.enter();
+    /// I2C
+    Wire.begin();                     // inicia I²C com pinos padrão (SDA21/SCL22)
 
+    xTaskCreate(I2CTask, "i2c", 4096, NULL, 4, NULL);   // nova task
+    ///
     xTaskCreate(TimerTask     , "timer", 2048, NULL, 5, NULL);
     xTaskCreate(TempTask      , "temp" , 4096, NULL, 4, NULL);
     xTaskCreate(UartTask      , "uart" , 2048, NULL, 3, NULL);
