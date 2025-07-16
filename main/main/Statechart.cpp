@@ -504,7 +504,7 @@ void Statechart::setOperationCallback(OperationCallback* operationCallback) noex
 void Statechart::enact_Brewer_IDLE()
 {
 	/* Entry action for state 'IDLE'. */
-	ifaceOperationCallback->writeUartString("log-default: utilizar curva default /n new: configurar nova curva /n reset: reiniciar curva default");
+	ifaceOperationCallback->writeUartString("log-\ndefault: utilizar curva default /n new: configurar nova curva /n reset: reiniciar curva default");
 }
 
 /* Entry action for state 'WaitTemp'. */
@@ -594,9 +594,9 @@ void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating()
 void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_current_curve()
 {
 	/* Entry action for state 'current_curve'. */
-	ifaceOperationCallback->writeUartString("\nTemperatura: ");
+	ifaceOperationCallback->writeUartString("log\n-Temperatura: ");
 	ifaceOperationCallback->writeUartInt(current_temp);
-	ifaceOperationCallback->writeUartString("\nDura\u00E7\u00E3o: ");
+	ifaceOperationCallback->writeUartString("log-Dura\u00E7\u00E3o: ");
 	ifaceOperationCallback->writeUartInt(current_duration);
 	completed = true;
 }
@@ -634,7 +634,9 @@ void Statechart::enact_Brewer_Brew_process_r1_READY()
 void Statechart::enact_Brewer_Brew_process_r1_END_PROCESS()
 {
 	/* Entry action for state 'END_PROCESS'. */
-	ifaceOperationCallback->writeUartString("log-PROCESSO FINALIZADO");
+	ifaceOperationCallback->writeUartString("log-\nPROCESSO FINALIZADO\n");
+	ifaceOperationCallback->writeMixer(0);
+	ifaceOperationCallback->writeHeater(0);
 	completed = true;
 }
 
@@ -2107,7 +2109,7 @@ sc::integer Statechart::Brewer_Brew_process_r1_next_curve_react(const sc::intege
 		stateConfVector[0] = Statechart::State::Brewer_Brew_process;
 		stateConfVectorPosition = 0;
 		/* The reactions of state null. */
-		if ((currentCurve) <= (step_count))
+		if ((currentCurve) < (step_count))
 		{ 
 			enseq_Brewer_Brew_process_r1_set_next_curve_default();
 		}  else

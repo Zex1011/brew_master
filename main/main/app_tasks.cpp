@@ -141,16 +141,16 @@ static void UartTask(void*) {
                     cb.lastUartInt = atoi(buf);
                     withSM([&]{ machine.raiseInt_received(); });
                 }
-                else if (strcmp(buf, "start_program") == 0) {
+                else if (strcmp(buf, "start") == 0) {
                     withSM([&]{ machine.raiseStart_program(); });
                 }
-                else if (strcmp(buf, "use_default") == 0) {
+                else if (strcmp(buf, "default") == 0) {
                     withSM([&]{ machine.raiseUse_default(); });
                 }
-                else if (strcmp(buf, "reset_default") == 0) {
+                else if (strcmp(buf, "reset") == 0) {
                     withSM([&]{ machine.raiseReset_default(); });
                 }
-                else if (strcmp(buf, "create_new") == 0) {
+                else if (strcmp(buf, "new") == 0) {
                     withSM([&]{ machine.raiseCreate_new(); });
                 }
                 else if (strcmp(buf, "cancel") == 0) {

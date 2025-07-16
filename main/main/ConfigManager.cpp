@@ -16,8 +16,8 @@ size_t   ConfigManager::stepCount_            = 0;
 /* Default de fábrica ------------------------------------------------------ */
 const BrewConfig ConfigManager::FACTORY_DEFAULT = {
     3,
-    {20, 65, 20},                 // temperaturas °C
-    {3600, 1800, 7200}            // durações  s
+    {67, 78, 85},                 // temperaturas °C
+    {120, 180, 50}            // durações  s
 };
 
 /* ------------------------------------------------------------------------- */

@@ -8,7 +8,7 @@ Projeto de sistemas embarcados
 
 -> PWM ou GPIO com histerese para controle de aquecimento
 
--> Conter curva padrão --> 67º - t0; 78º - t1; max - t2.
+-> Conter curva padrão --> 67º - t0; 78º - t1; 85 - t2.
 
 -> Sistema de adição de curva
 
