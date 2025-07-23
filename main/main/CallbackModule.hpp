@@ -8,7 +8,7 @@
 //#include "driver/gpio.h"
 
 // ajuste se seus pinos estiverem em outro header
-constexpr gpio_num_t PIN_HEATER = GPIO_NUM_2;
+constexpr gpio_num_t PIN_HEATER = GPIO_NUM_18;
 constexpr gpio_num_t PIN_MIXER  = GPIO_NUM_5;
 
 /**
@@ -22,7 +22,7 @@ public:
     void configGPIO() override;
 
     /* ---- controle físico ---- */
-    void writeHeater(sc::integer val) override;
+    //void writeHeater(sc::integer val) override;
     void writeMixer (sc::integer val) override;
 
 
@@ -53,6 +53,8 @@ public:
     /* ---- cronômetro ---- */
     void op_TimerInit()                 override;
     void op_StartTimer(sc::integer s)   override;
+    void op_StopTimer()                 override;
+    void op_ContinueTimer()             override;
     bool op_IsTimerRunning()            override;
 
     /* ---- set-point ---- */

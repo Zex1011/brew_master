@@ -106,14 +106,14 @@ bool Statechart::dispatchEvent(Statechart::EventInstance* event) noexcept
 			timer_trigger_raised = true;
 			break;
 		}
-		case Statechart::Event::heater_on:
+		case Statechart::Event::temp_wrong:
 		{
-			heater_on_raised = true;
+			temp_wrong_raised = true;
 			break;
 		}
-		case Statechart::Event::heater_off:
+		case Statechart::Event::temp_right:
 		{
-			heater_off_raised = true;
+			temp_right_raised = true;
 			break;
 		}
 		case Statechart::Event::mixer_on:
@@ -227,17 +227,17 @@ void Statechart::raiseTimer_trigger() {
 }
 
 
-/*! Raises the in event 'heater_on' of default interface scope. */
-void Statechart::raiseHeater_on() {
-	incomingEventQueue.push_back(new Statechart::EventInstance(Statechart::Event::heater_on))
+/*! Raises the in event 'temp_wrong' of default interface scope. */
+void Statechart::raiseTemp_wrong() {
+	incomingEventQueue.push_back(new Statechart::EventInstance(Statechart::Event::temp_wrong))
 	;
 	runCycle();
 }
 
 
-/*! Raises the in event 'heater_off' of default interface scope. */
-void Statechart::raiseHeater_off() {
-	incomingEventQueue.push_back(new Statechart::EventInstance(Statechart::Event::heater_off))
+/*! Raises the in event 'temp_right' of default interface scope. */
+void Statechart::raiseTemp_right() {
+	incomingEventQueue.push_back(new Statechart::EventInstance(Statechart::Event::temp_right))
 	;
 	runCycle();
 }
@@ -332,7 +332,7 @@ bool Statechart::isStateActive(State state) const noexcept
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING :
 		{
-			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING] >= Statechart::State::Brewer_Brew_process_r1_RUNNING && stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING] <= Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on);
+			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING] >= Statechart::State::Brewer_Brew_process_r1_RUNNING && stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING] <= Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong);
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_MixerCtrl_Mixing :
@@ -355,9 +355,9 @@ bool Statechart::isStateActive(State state) const noexcept
 			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix] == Statechart::State::Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix);
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right :
 		{
-			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off);
+			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right);
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control :
@@ -365,14 +365,14 @@ bool Statechart::isStateActive(State state) const noexcept
 			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_set_control] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control);
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer :
 		{
-			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating);
+			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer);
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer :
 		{
-			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating);
+			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer);
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_current_curve :
@@ -385,9 +385,9 @@ bool Statechart::isStateActive(State state) const noexcept
 			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_start_timer] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_start_timer);
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong :
 		{
-			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on);
+			return  (stateConfVector[scvi_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong] == Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong);
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_next_curve :
@@ -443,6 +443,11 @@ bool Statechart::isStateActive(State state) const noexcept
 		case Statechart::State::Brewer_Timer_config :
 		{
 			return  (stateConfVector[scvi_Brewer_Timer_config] == Statechart::State::Brewer_Timer_config);
+			break;
+		}
+		case Statechart::State::Brewer_clean_config :
+		{
+			return  (stateConfVector[scvi_Brewer_clean_config] == Statechart::State::Brewer_clean_config);
 			break;
 		}
 		default:
@@ -575,19 +580,19 @@ void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_set_control()
 	completed = true;
 }
 
-void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating()
+void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer()
 {
-	/* Entry action for state 'Stop_heating'. */
-	ifaceOperationCallback->writeUartString("log-Aquecimento Desligado");
-	ifaceOperationCallback->writeHeater(0);
+	/* Entry action for state 'Start_timer'. */
+	ifaceOperationCallback->writeUartString("log-Procedendo_contagem");
+	ifaceOperationCallback->op_ContinueTimer();
 	completed = true;
 }
 
-void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating()
+void Statechart::enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer()
 {
-	/* Entry action for state 'Start_heating'. */
-	ifaceOperationCallback->writeUartString("log-Aquecimento Ligado");
-	ifaceOperationCallback->writeHeater(1);
+	/* Entry action for state 'Stop_timer'. */
+	ifaceOperationCallback->writeUartString("log-Contagem_pausada");
+	ifaceOperationCallback->op_StopTimer();
 	completed = true;
 }
 
@@ -636,7 +641,7 @@ void Statechart::enact_Brewer_Brew_process_r1_END_PROCESS()
 	/* Entry action for state 'END_PROCESS'. */
 	ifaceOperationCallback->writeUartString("log-\nPROCESSO FINALIZADO\n");
 	ifaceOperationCallback->writeMixer(0);
-	ifaceOperationCallback->writeHeater(0);
+	ifaceOperationCallback->op_SetTemperature(0);
 	completed = true;
 }
 
@@ -687,6 +692,13 @@ void Statechart::enact_Brewer_Timer_config()
 	completed = true;
 }
 
+void Statechart::enact_Brewer_clean_config()
+{
+	/* Entry action for state 'clean_config'. */
+	ifaceOperationCallback->op_ClearFlashConfig();
+	completed = true;
+}
+
 /* 'default' enter sequence for state IDLE */
 void Statechart::enseq_Brewer_IDLE_default()
 {
@@ -694,13 +706,6 @@ void Statechart::enseq_Brewer_IDLE_default()
 	enact_Brewer_IDLE();
 	stateConfVector[0] = Statechart::State::Brewer_IDLE;
 	stateConfVectorPosition = 0;
-}
-
-/* 'default' enter sequence for state Brew_process */
-void Statechart::enseq_Brewer_Brew_process_default()
-{
-	/* 'default' enter sequence for state Brew_process */
-	enseq_Brewer_Brew_process_r1_default();
 }
 
 /* 'default' enter sequence for state CONFIG */
@@ -772,21 +777,21 @@ void Statechart::enseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix_default
 	stateConfVectorPosition = 0;
 }
 
-/* 'default' enter sequence for state Stop_heating */
-void Statechart::enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_default()
+/* 'default' enter sequence for state Start_timer */
+void Statechart::enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_default()
 {
-	/* 'default' enter sequence for state Stop_heating */
-	enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
-	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating;
+	/* 'default' enter sequence for state Start_timer */
+	enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
+	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer;
 	stateConfVectorPosition = 1;
 }
 
-/* 'default' enter sequence for state Start_heating */
-void Statechart::enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_default()
+/* 'default' enter sequence for state Stop_timer */
+void Statechart::enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_default()
 {
-	/* 'default' enter sequence for state Start_heating */
-	enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
-	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating;
+	/* 'default' enter sequence for state Stop_timer */
+	enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
+	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer;
 	stateConfVectorPosition = 1;
 }
 
@@ -859,6 +864,15 @@ void Statechart::enseq_Brewer_reset_default_default()
 	/* 'default' enter sequence for state reset_default */
 	enact_Brewer_reset_default();
 	stateConfVector[0] = Statechart::State::Brewer_reset_default;
+	stateConfVectorPosition = 0;
+}
+
+/* 'default' enter sequence for state clean_config */
+void Statechart::enseq_Brewer_clean_config_default()
+{
+	/* 'default' enter sequence for state clean_config */
+	enact_Brewer_clean_config();
+	stateConfVector[0] = Statechart::State::Brewer_clean_config;
 	stateConfVectorPosition = 0;
 }
 
@@ -1015,10 +1029,10 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix()
 	stateConfVectorPosition = 0;
 }
 
-/* Default exit sequence for state Heater_off */
-void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off()
+/* Default exit sequence for state Temp_right */
+void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right()
 {
-	/* Default exit sequence for state Heater_off */
+	/* Default exit sequence for state Temp_right */
 	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 	stateConfVectorPosition = 1;
 }
@@ -1031,18 +1045,18 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_set_control()
 	stateConfVectorPosition = 1;
 }
 
-/* Default exit sequence for state Stop_heating */
-void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating()
+/* Default exit sequence for state Start_timer */
+void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer()
 {
-	/* Default exit sequence for state Stop_heating */
+	/* Default exit sequence for state Start_timer */
 	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 	stateConfVectorPosition = 1;
 }
 
-/* Default exit sequence for state Start_heating */
-void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating()
+/* Default exit sequence for state Stop_timer */
+void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer()
 {
-	/* Default exit sequence for state Start_heating */
+	/* Default exit sequence for state Stop_timer */
 	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 	stateConfVectorPosition = 1;
 }
@@ -1063,10 +1077,10 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_start_timer()
 	stateConfVectorPosition = 1;
 }
 
-/* Default exit sequence for state Heater_on */
-void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on()
+/* Default exit sequence for state Temp_wrong */
+void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong()
 {
-	/* Default exit sequence for state Heater_on */
+	/* Default exit sequence for state Temp_wrong */
 	stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 	stateConfVectorPosition = 1;
 }
@@ -1155,6 +1169,14 @@ void Statechart::exseq_Brewer_config_init()
 void Statechart::exseq_Brewer_Timer_config()
 {
 	/* Default exit sequence for state Timer_config */
+	stateConfVector[0] = Statechart::State::NO_STATE;
+	stateConfVectorPosition = 0;
+}
+
+/* Default exit sequence for state clean_config */
+void Statechart::exseq_Brewer_clean_config()
+{
+	/* Default exit sequence for state clean_config */
 	stateConfVector[0] = Statechart::State::NO_STATE;
 	stateConfVectorPosition = 0;
 }
@@ -1281,6 +1303,11 @@ void Statechart::exseq_Brewer()
 			exseq_Brewer_Timer_config();
 			break;
 		}
+		case Statechart::State::Brewer_clean_config :
+		{
+			exseq_Brewer_clean_config();
+			break;
+		}
 		default:
 			/* do nothing */
 			break;
@@ -1288,9 +1315,9 @@ void Statechart::exseq_Brewer()
 	/* Handle exit of all possible states (of Statechart.Brewer) at position 1... */
 	switch(stateConfVector[ 1 ])
 	{
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control :
@@ -1298,14 +1325,14 @@ void Statechart::exseq_Brewer()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_set_control();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_current_curve :
@@ -1318,9 +1345,9 @@ void Statechart::exseq_Brewer()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong();
 			break;
 		}
 		default:
@@ -1418,9 +1445,9 @@ void Statechart::exseq_Brewer_Brew_process_r1()
 	/* Handle exit of all possible states (of Statechart.Brewer.Brew_process.r1) at position 1... */
 	switch(stateConfVector[ 1 ])
 	{
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control :
@@ -1428,14 +1455,14 @@ void Statechart::exseq_Brewer_Brew_process_r1()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_set_control();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_current_curve :
@@ -1448,9 +1475,9 @@ void Statechart::exseq_Brewer_Brew_process_r1()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong();
 			break;
 		}
 		default:
@@ -1542,9 +1569,9 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves()
 	/* Handle exit of all possible states (of Statechart.Brewer.Brew_process.r1.RUNNING.Curves) at position 1... */
 	switch(stateConfVector[ 1 ])
 	{
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control :
@@ -1552,14 +1579,14 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_set_control();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
 			break;
 		}
 		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_current_curve :
@@ -1572,9 +1599,9 @@ void Statechart::exseq_Brewer_Brew_process_r1_RUNNING_Curves()
 			exseq_Brewer_Brew_process_r1_RUNNING_Curves_start_timer();
 			break;
 		}
-		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on :
+		case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong :
 		{
-			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on();
+			exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong();
 			break;
 		}
 		default:
@@ -1635,7 +1662,7 @@ sc::integer Statechart::Brewer_IDLE_react(const sc::integer transitioned_before)
 				if (create_new_raised)
 				{ 
 					exseq_Brewer_IDLE();
-					enseq_Brewer_Brew_process_default();
+					enseq_Brewer_clean_config_default();
 					transitioned_after = 0;
 				}  else
 				{
@@ -1948,17 +1975,17 @@ sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix_react(
 	return transitioned_after;
 }
 
-sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off_react(const sc::integer transitioned_before) {
-	/* The reactions of state Heater_off. */
+sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right_react(const sc::integer transitioned_before) {
+	/* The reactions of state Temp_right. */
 	sc::integer transitioned_after = transitioned_before;
 	if (!(doCompletion))
 	{ 
 		if ((transitioned_after) < (1))
 		{ 
-			if (heater_on_raised)
+			if (temp_wrong_raised)
 			{ 
-				exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off();
-				enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_default();
+				exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right();
+				enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_default();
 				Brewer_Brew_process_r1_RUNNING_react(0);
 				transitioned_after = 1;
 			} 
@@ -1981,8 +2008,8 @@ sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_set_control_react(
 		/* Default exit sequence for state set_control */
 		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 		stateConfVectorPosition = 1;
-		/* 'default' enter sequence for state Heater_off */
-		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off;
+		/* 'default' enter sequence for state Temp_right */
+		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right;
 		stateConfVectorPosition = 1;
 		Brewer_Brew_process_r1_RUNNING_react(0);
 	}  else
@@ -1993,16 +2020,16 @@ sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_set_control_react(
 	return transitioned_after;
 }
 
-sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_react(const sc::integer transitioned_before) {
-	/* The reactions of state Stop_heating. */
+sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_react(const sc::integer transitioned_before) {
+	/* The reactions of state Start_timer. */
 	sc::integer transitioned_after = transitioned_before;
 	if (doCompletion)
 	{ 
-		/* Default exit sequence for state Stop_heating */
+		/* Default exit sequence for state Start_timer */
 		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 		stateConfVectorPosition = 1;
-		/* 'default' enter sequence for state Heater_off */
-		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off;
+		/* 'default' enter sequence for state Temp_right */
+		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right;
 		stateConfVectorPosition = 1;
 		Brewer_Brew_process_r1_RUNNING_react(0);
 	}  else
@@ -2013,16 +2040,16 @@ sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_react
 	return transitioned_after;
 }
 
-sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_react(const sc::integer transitioned_before) {
-	/* The reactions of state Start_heating. */
+sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_react(const sc::integer transitioned_before) {
+	/* The reactions of state Stop_timer. */
 	sc::integer transitioned_after = transitioned_before;
 	if (doCompletion)
 	{ 
-		/* Default exit sequence for state Start_heating */
+		/* Default exit sequence for state Stop_timer */
 		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING;
 		stateConfVectorPosition = 1;
-		/* 'default' enter sequence for state Heater_on */
-		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on;
+		/* 'default' enter sequence for state Temp_wrong */
+		stateConfVector[1] = Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong;
 		stateConfVectorPosition = 1;
 		Brewer_Brew_process_r1_RUNNING_react(0);
 	}  else
@@ -2075,17 +2102,17 @@ sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_start_timer_react(
 	return transitioned_after;
 }
 
-sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on_react(const sc::integer transitioned_before) {
-	/* The reactions of state Heater_on. */
+sc::integer Statechart::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong_react(const sc::integer transitioned_before) {
+	/* The reactions of state Temp_wrong. */
 	sc::integer transitioned_after = transitioned_before;
 	if (!(doCompletion))
 	{ 
 		if ((transitioned_after) < (1))
 		{ 
-			if (heater_off_raised)
+			if (temp_right_raised)
 			{ 
-				exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on();
-				enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_default();
+				exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong();
+				enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_default();
 				Brewer_Brew_process_r1_RUNNING_react(0);
 				transitioned_after = 1;
 			} 
@@ -2331,6 +2358,24 @@ sc::integer Statechart::Brewer_Timer_config_react(const sc::integer transitioned
 	return transitioned_after;
 }
 
+sc::integer Statechart::Brewer_clean_config_react(const sc::integer transitioned_before) {
+	/* The reactions of state clean_config. */
+	sc::integer transitioned_after = transitioned_before;
+	if (doCompletion)
+	{ 
+		/* Default exit sequence for state clean_config */
+		stateConfVector[0] = Statechart::State::NO_STATE;
+		stateConfVectorPosition = 0;
+		/* 'default' enter sequence for state Brew_process */
+		enseq_Brewer_Brew_process_r1_default();
+	}  else
+	{
+		/* Always execute local reactions. */
+		transitioned_after = transitioned_before;
+	}
+	return transitioned_after;
+}
+
 void Statechart::clearInEvents() noexcept {
 	start_program_raised = false;
 	use_default_raised = false;
@@ -2343,8 +2388,8 @@ void Statechart::clearInEvents() noexcept {
 	config_raised = false;
 	ready_raised = false;
 	timer_trigger_raised = false;
-	heater_on_raised = false;
-	heater_off_raised = false;
+	temp_wrong_raised = false;
+	temp_right_raised = false;
 	mixer_on_raised = false;
 	mixer_off_raised = false;
 }
@@ -2464,6 +2509,11 @@ void Statechart::microStep() {
 			transitioned = Brewer_Timer_config_react(transitioned);
 			break;
 		}
+		case Statechart::State::Brewer_clean_config :
+		{
+			transitioned = Brewer_clean_config_react(transitioned);
+			break;
+		}
 		default:
 			/* do nothing */
 			break;
@@ -2472,9 +2522,9 @@ void Statechart::microStep() {
 	{ 
 		switch(stateConfVector[ 1 ])
 		{
-			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_off :
+			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_right :
 			{
-				Brewer_Brew_process_r1_RUNNING_Curves_Heater_off_react(transitioned);
+				Brewer_Brew_process_r1_RUNNING_Curves_Temp_right_react(transitioned);
 				break;
 			}
 			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_set_control :
@@ -2482,14 +2532,14 @@ void Statechart::microStep() {
 				Brewer_Brew_process_r1_RUNNING_Curves_set_control_react(transitioned);
 				break;
 			}
-			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating :
+			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_timer :
 			{
-				Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_react(transitioned);
+				Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_react(transitioned);
 				break;
 			}
-			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Start_heating :
+			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer :
 			{
-				Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_react(transitioned);
+				Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_react(transitioned);
 				break;
 			}
 			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_current_curve :
@@ -2502,9 +2552,9 @@ void Statechart::microStep() {
 				Brewer_Brew_process_r1_RUNNING_Curves_start_timer_react(transitioned);
 				break;
 			}
-			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Heater_on :
+			case Statechart::State::Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong :
 			{
-				Brewer_Brew_process_r1_RUNNING_Curves_Heater_on_react(transitioned);
+				Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong_react(transitioned);
 				break;
 			}
 			default:

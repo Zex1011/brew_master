@@ -12,10 +12,12 @@ void CallbackModule::configGPIO() {
 }
 
 /* ---------- controle físico ---------- */
-void CallbackModule::writeHeater(sc::integer val)
-{
-    GPIO_Module::writePin(PIN_HEATER, val);
-}
+//void CallbackModule::writeHeater(sc::integer val) // obsoleto com o PID implementado
+//{
+//    GPIO_Module::writePin(PIN_HEATER, val);
+//}
+
+
 void CallbackModule::writeMixer(sc::integer val)
 {
     GPIO_Module::writePin(PIN_MIXER, val);
@@ -45,6 +47,8 @@ void CallbackModule::op_PrintConfig()                          { ConfigManager::
 /* ---------- cronômetro ---------- */
 void CallbackModule::op_TimerInit()               { timerRunning = false; secLeft = 0; }
 void CallbackModule::op_StartTimer(sc::integer s) { timerRunning = s > 0; secLeft = s; }
+void CallbackModule::op_StopTimer()               {timerRunning = false; }
+void CallbackModule::op_ContinueTimer()           {timerRunning = false; }
 bool CallbackModule::op_IsTimerRunning()          { return timerRunning; }
 
 /* ---------- set-point ---------- */

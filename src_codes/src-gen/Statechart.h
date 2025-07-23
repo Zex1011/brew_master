@@ -47,13 +47,13 @@ class Statechart : public sc::EventDrivenInterface
 			Brewer_Brew_process_r1_RUNNING_MixerCtrl_Holding,
 			Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix,
 			Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix,
-			Brewer_Brew_process_r1_RUNNING_Curves_Heater_off,
+			Brewer_Brew_process_r1_RUNNING_Curves_Temp_right,
 			Brewer_Brew_process_r1_RUNNING_Curves_set_control,
-			Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating,
-			Brewer_Brew_process_r1_RUNNING_Curves_Start_heating,
+			Brewer_Brew_process_r1_RUNNING_Curves_Start_timer,
+			Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer,
 			Brewer_Brew_process_r1_RUNNING_Curves_current_curve,
 			Brewer_Brew_process_r1_RUNNING_Curves_start_timer,
-			Brewer_Brew_process_r1_RUNNING_Curves_Heater_on,
+			Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong,
 			Brewer_Brew_process_r1_next_curve,
 			Brewer_Brew_process_r1_set_next_curve,
 			Brewer_Brew_process_r1_READY,
@@ -64,11 +64,12 @@ class Statechart : public sc::EventDrivenInterface
 			Brewer_load_default,
 			Brewer_reset_default,
 			Brewer_config_init,
-			Brewer_Timer_config
+			Brewer_Timer_config,
+			Brewer_clean_config
 		};
 		
 		/*! The number of states. */
-		static constexpr const sc::integer numStates {32};
+		static constexpr const sc::integer numStates {33};
 		static constexpr const sc::integer scvi_Brewer_IDLE {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_CONFIG {0};
@@ -83,13 +84,13 @@ class Statechart : public sc::EventDrivenInterface
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Holding {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix {0};
-		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off {1};
+		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right {1};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_set_control {1};
-		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating {1};
-		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating {1};
+		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer {1};
+		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer {1};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_current_curve {1};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_start_timer {1};
-		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on {1};
+		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong {1};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_next_curve {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_set_next_curve {0};
 		static constexpr const sc::integer scvi_Brewer_Brew_process_r1_READY {0};
@@ -101,6 +102,7 @@ class Statechart : public sc::EventDrivenInterface
 		static constexpr const sc::integer scvi_Brewer_reset_default {0};
 		static constexpr const sc::integer scvi_Brewer_config_init {0};
 		static constexpr const sc::integer scvi_Brewer_Timer_config {0};
+		static constexpr const sc::integer scvi_Brewer_clean_config {0};
 		
 		/*! Enumeration of all events which are consumed. */
 		enum class Event
@@ -117,8 +119,8 @@ class Statechart : public sc::EventDrivenInterface
 			config,
 			ready,
 			timer_trigger,
-			heater_on,
-			heater_off,
+			temp_wrong,
+			temp_right,
 			mixer_on,
 			mixer_off
 		};
@@ -152,10 +154,10 @@ class Statechart : public sc::EventDrivenInterface
 		void raiseReady();
 		/*! Raises the in event 'timer_trigger' of default interface scope. */
 		void raiseTimer_trigger();
-		/*! Raises the in event 'heater_on' of default interface scope. */
-		void raiseHeater_on();
-		/*! Raises the in event 'heater_off' of default interface scope. */
-		void raiseHeater_off();
+		/*! Raises the in event 'temp_wrong' of default interface scope. */
+		void raiseTemp_wrong();
+		/*! Raises the in event 'temp_right' of default interface scope. */
+		void raiseTemp_right();
 		/*! Raises the in event 'mixer_on' of default interface scope. */
 		void raiseMixer_on();
 		/*! Raises the in event 'mixer_off' of default interface scope. */
@@ -192,8 +194,6 @@ class Statechart : public sc::EventDrivenInterface
 				
 				virtual void writeUartInt(sc::integer value) = 0;
 				
-				virtual void writeHeater(sc::integer value) = 0;
-				
 				virtual void writeMixer(sc::integer value) = 0;
 				
 				virtual sc::integer op_getUartInt() = 0;
@@ -225,6 +225,10 @@ class Statechart : public sc::EventDrivenInterface
 				virtual void op_TimerInit() = 0;
 				
 				virtual void op_StartTimer(sc::integer seconds) = 0;
+				
+				virtual void op_StopTimer() = 0;
+				
+				virtual void op_ContinueTimer() = 0;
 				
 				virtual bool op_IsTimerRunning() = 0;
 				
@@ -322,8 +326,8 @@ class Statechart : public sc::EventDrivenInterface
 		void enact_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix();
 		void enact_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix();
 		void enact_Brewer_Brew_process_r1_RUNNING_Curves_set_control();
-		void enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
-		void enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
+		void enact_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
+		void enact_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
 		void enact_Brewer_Brew_process_r1_RUNNING_Curves_current_curve();
 		void enact_Brewer_Brew_process_r1_RUNNING_Curves_start_timer();
 		void enact_Brewer_Brew_process_r1_next_curve();
@@ -337,8 +341,8 @@ class Statechart : public sc::EventDrivenInterface
 		void enact_Brewer_reset_default();
 		void enact_Brewer_config_init();
 		void enact_Brewer_Timer_config();
+		void enact_Brewer_clean_config();
 		void enseq_Brewer_IDLE_default();
-		void enseq_Brewer_Brew_process_default();
 		void enseq_Brewer_Brew_process_r1_CONFIG_default();
 		void enseq_Brewer_Brew_process_r1_CONFIG_Config_WaitTemp_default();
 		void enseq_Brewer_Brew_process_r1_CONFIG_Config_set_Temp_default();
@@ -347,8 +351,8 @@ class Statechart : public sc::EventDrivenInterface
 		void enseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Holding_default();
 		void enseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix_default();
 		void enseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix_default();
-		void enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_default();
-		void enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_default();
+		void enseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_default();
+		void enseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_default();
 		void enseq_Brewer_Brew_process_r1_RUNNING_Curves_current_curve_default();
 		void enseq_Brewer_Brew_process_r1_next_curve_default();
 		void enseq_Brewer_Brew_process_r1_set_next_curve_default();
@@ -357,6 +361,7 @@ class Statechart : public sc::EventDrivenInterface
 		void enseq_Brewer_Pre_start_default();
 		void enseq_Brewer_load_default_default();
 		void enseq_Brewer_reset_default_default();
+		void enseq_Brewer_clean_config_default();
 		void enseq_Brewer_default();
 		void enseq_Brewer_Brew_process_r1_default();
 		void enseq_Brewer_Brew_process_r1_CONFIG_Config_default();
@@ -376,13 +381,13 @@ class Statechart : public sc::EventDrivenInterface
 		void exseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Holding();
 		void exseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix();
 		void exseq_Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix();
-		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_off();
+		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_right();
 		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_set_control();
-		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating();
-		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_heating();
+		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Start_timer();
+		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer();
 		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_current_curve();
 		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_start_timer();
-		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Heater_on();
+		void exseq_Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong();
 		void exseq_Brewer_Brew_process_r1_next_curve();
 		void exseq_Brewer_Brew_process_r1_set_next_curve();
 		void exseq_Brewer_Brew_process_r1_READY();
@@ -394,6 +399,7 @@ class Statechart : public sc::EventDrivenInterface
 		void exseq_Brewer_reset_default();
 		void exseq_Brewer_config_init();
 		void exseq_Brewer_Timer_config();
+		void exseq_Brewer_clean_config();
 		void exseq_Brewer();
 		void exseq_Brewer_Brew_process_r1();
 		void exseq_Brewer_Brew_process_r1_CONFIG_Config();
@@ -418,13 +424,13 @@ class Statechart : public sc::EventDrivenInterface
 		sc::integer Brewer_Brew_process_r1_RUNNING_MixerCtrl_Holding_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_RUNNING_MixerCtrl_Start_Mix_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_RUNNING_MixerCtrl_Stop_mix_react(const sc::integer transitioned_before);
-		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Heater_off_react(const sc::integer transitioned_before);
+		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Temp_right_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_set_control_react(const sc::integer transitioned_before);
-		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Stop_heating_react(const sc::integer transitioned_before);
-		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Start_heating_react(const sc::integer transitioned_before);
+		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Start_timer_react(const sc::integer transitioned_before);
+		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Stop_timer_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_current_curve_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_start_timer_react(const sc::integer transitioned_before);
-		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Heater_on_react(const sc::integer transitioned_before);
+		sc::integer Brewer_Brew_process_r1_RUNNING_Curves_Temp_wrong_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_next_curve_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_set_next_curve_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Brew_process_r1_READY_react(const sc::integer transitioned_before);
@@ -436,6 +442,7 @@ class Statechart : public sc::EventDrivenInterface
 		sc::integer Brewer_reset_default_react(const sc::integer transitioned_before);
 		sc::integer Brewer_config_init_react(const sc::integer transitioned_before);
 		sc::integer Brewer_Timer_config_react(const sc::integer transitioned_before);
+		sc::integer Brewer_clean_config_react(const sc::integer transitioned_before);
 		void clearInEvents() noexcept;
 		void microStep();
 		void runCycle();
@@ -475,11 +482,11 @@ class Statechart : public sc::EventDrivenInterface
 		/*! Indicates event 'timer_trigger' of default interface scope is active. */
 		bool timer_trigger_raised {false};
 		
-		/*! Indicates event 'heater_on' of default interface scope is active. */
-		bool heater_on_raised {false};
+		/*! Indicates event 'temp_wrong' of default interface scope is active. */
+		bool temp_wrong_raised {false};
 		
-		/*! Indicates event 'heater_off' of default interface scope is active. */
-		bool heater_off_raised {false};
+		/*! Indicates event 'temp_right' of default interface scope is active. */
+		bool temp_right_raised {false};
 		
 		/*! Indicates event 'mixer_on' of default interface scope is active. */
 		bool mixer_on_raised {false};
