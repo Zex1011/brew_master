@@ -48,7 +48,7 @@ void CallbackModule::op_PrintConfig()                          { ConfigManager::
 void CallbackModule::op_TimerInit()               { timerRunning = false; secLeft = 0; }
 void CallbackModule::op_StartTimer(sc::integer s) { timerRunning = s > 0; secLeft = s; }
 void CallbackModule::op_StopTimer()               {timerRunning = false; }
-void CallbackModule::op_ContinueTimer()           {timerRunning = false; }
+void CallbackModule::op_ContinueTimer()           {timerRunning = true; }
 bool CallbackModule::op_IsTimerRunning()          { return timerRunning; }
 
 /* ---------- set-point ---------- */

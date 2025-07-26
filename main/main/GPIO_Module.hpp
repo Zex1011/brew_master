@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-#include "sc_types.h"          // se precisar de sc::integer
+#include "sc_types.h"
 
 class GPIO_Module {
 public:

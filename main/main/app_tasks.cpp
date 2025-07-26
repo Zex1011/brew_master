@@ -162,7 +162,8 @@ static void TempTask(void *) {
         int8_t t2 = g_sensor2;
         int8_t sp = cb.setPoint;
         /* --- Timer_counter: baseado no sensor1 --- */
-        bool temp_wrong = (t1-sp)>1;
+        bool temp_wrong = (sp-t1)>1;
+        
         withSM([&]{
             if (temp_wrong)     machine.raiseTemp_wrong();
             else                machine.raiseTemp_right();
