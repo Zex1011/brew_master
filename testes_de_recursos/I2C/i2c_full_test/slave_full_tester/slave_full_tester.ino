@@ -26,17 +26,20 @@ unsigned long last_simulated_temp_update_time; // Para calcular o delta t
 
 // Parâmetros do modelo de inércia térmica
 const float TEMPERATURA_AMBIENTE = 25.0; // Temperatura que o tanque tende se não aquecido - 25C
-const float GANHO_AQUECIMENTO = 1.0;    // Quão eficientemente o PWM aquece (graus C por segundo por unidade de PWM) - 0.05
 const float TAXA_RESFRIAMENTO = 0.05;    // Quão rápido o tanque resfria para a temperatura ambiente (fator) - 0.01
-
+//const float GANHO_AQUECIMENTO = 1.0;    // Quão eficientemente o PWM aquece (graus C por segundo por unidade de PWM) - 0.05
+const float GANHO_AQUECIMENTO  = (MAX_TEMP_SIMULATED - TEMPERATURA_AMBIENTE) * TAXA_RESFRIAMENTO;
 
 // Callback: master requisitou dados
 void onRequest() {
-  float temp_copy = simulatedTemperature; 
-  Serial.printf("RequestEvent: Mestre requisitou dados. Enviando temperatura: %.2f C\n", temp_copy);
-  byte data[4];
-  memcpy(data, &temp_copy, 4); 
-  Wire.write(data, 4); 
+  // Converte a temperatura simulada para int8 (1 byte)
+  int8_t temp_int = (int8_t)roundf(simulatedTemperature);
+  // Limita entre 25 e 100 para evitar valores fora do intervalo
+  if (temp_int < MIN_TEMP_SIMULATED) temp_int = (int8_t)MIN_TEMP_SIMULATED;
+  if (temp_int > MAX_TEMP_SIMULATED) temp_int = (int8_t)MAX_TEMP_SIMULATED;
+
+  Serial.printf("RequestEvent: Mestre requisitou dados. Enviando temperatura: %d C\n", temp_int);
+  Wire.write((uint8_t*)&temp_int, 1);  // Envia apenas 1 byte
 }
 
 // Callback: master enviou dados (debug)
@@ -79,28 +82,22 @@ void loop() {
   float dt_seconds = (float)(current_time - last_simulated_temp_update_time) / 1000.0; // Tempo em segundos
   last_simulated_temp_update_time = current_time;
 
-
   // Lê a potência do aquecedor (do PWM do mestre)
   int adc_value = analogRead(ADC_INPUT_PIN);
-  float heating_power_0_to_1 = (float)adc_value / ADC_MAX_VALUE; // Converte ADC para escala 0.0 a 1.0
+  float heating_power_0_to_1 = ((float)adc_value) / ADC_MAX_VALUE; // Converte ADC para escala 0.0 a 1.0
 
   // Calcula a variação da temperatura (modelo de inércia)
   float delta_T = 0;
-  // Efeito do Aquecimento: Direto da potência do PWM
-  // heating_power_0_to_1 * GANHO_AQUECIMENTO => representa a taxa de aquecimento instantânea em C/s
   delta_T += heating_power_0_to_1 * GANHO_AQUECIMENTO * dt_seconds;
-
-  // Efeito do Resfriamento para o Ambiente: Se o tanque está mais quente/frio que o ambiente, ele tende ao ambiente
   delta_T -= (simulatedTemperature - TEMPERATURA_AMBIENTE) * TAXA_RESFRIAMENTO * dt_seconds;
   
-  // Atualiza a temperatura simulada
   simulatedTemperature += delta_T;
 
-  // Limita a temperatura simulada aos limites (bom para evitar valores absurdos)
+  // Limita a temperatura simulada
   if (simulatedTemperature < MIN_TEMP_SIMULATED) simulatedTemperature = MIN_TEMP_SIMULATED;
   if (simulatedTemperature > MAX_TEMP_SIMULATED) simulatedTemperature = MAX_TEMP_SIMULATED; 
 
-  // Imprimir a temperatura simulada para depuração no escravo
+  // Debug
   Serial.printf("Slave: ADC = %d (P=%.2f), dT=%.3f, Temp=%.2f C\n", adc_value, heating_power_0_to_1, delta_T, simulatedTemperature);
   
   delay(100); // Roda o loop a cada 100ms

@@ -25,12 +25,12 @@ constexpr uint8_t I2C_ADDR_SENSOR2 = 0x09;
 // Testando aplicação de I2C
 static int16_t readTemp8(uint8_t addr)
 {
-    Wire.beginTransmission(addr);
+    //Wire.beginTransmission(addr);
     //Wire.write(0x00);                // registrador/ponteiro a ler (exemplo)
     //Wire.endTransmission(false);     // *false* mantém o bus ativo (repeated-start)
 
     Wire.requestFrom(addr, (uint8_t)1);
-    if (Wire.available() < 2) return INT8_MIN;   // erro
+    if (Wire.available() < 1) return INT8_MIN;   // erro
 
     uint8_t msb = Wire.read();
     //uint8_t lsb = Wire.read();
@@ -76,9 +76,9 @@ constexpr uint16_t PWM_MAX_DUTY  = (1u << PWM_RES_BITS) - 1;
 
 
 // ganhos do controlador
-constexpr double Kp = 20.0;
-constexpr double Ki = 0.1;
-constexpr double Kd = 5.0;
+constexpr double Kp = 5.0;
+constexpr double Ki = 1.5;
+constexpr double Kd = 16.0;
 
 // variáveis do PID
 double pidInput  = 0.0;
@@ -163,7 +163,7 @@ static void TempTask(void *) {
         int8_t sp = cb.setPoint;
         /* --- Timer_counter: baseado no sensor1 --- */
         bool temp_wrong = (sp-t1)>1;
-        
+
         withSM([&]{
             if (temp_wrong)     machine.raiseTemp_wrong();
             else                machine.raiseTemp_right();
