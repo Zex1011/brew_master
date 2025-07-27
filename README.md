@@ -165,6 +165,6 @@ Função que realiza a **inicialização das tarefas** e componentes do sistema:
 
 Uma demonstração do sistema funcionando está disponível no video "funcionamento_brew_master.mp4", e consiste em utilizar um arduino secudário para fazer o papel de aquecimento e sensor de temperatura 1, mostrando, junto com a interface gráfica, o funcionamento da statechart, comunicação I2C, controle PID e seu PWM, funcionamento do timer, adição de configuração de curvas, dentre outros.
 
-
+Clique abaixo para acessar o vídeo:
 
 [![Clique aqui para ver a demonstração em vídeo](https://img.youtube.com/vi/GieusbFribU/hqdefault.jpg)](https://www.youtube.com/watch?v=GieusbFribU)
