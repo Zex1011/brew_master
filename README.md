@@ -1,31 +1,26 @@
 # brew_master
 Projeto de sistemas embarcados
 
-# Requisitos básicos gerais do projeto combinados em sala
--> Sensor de temperatura através de interface I2C
+# Descrição do projeto:
 
--> GPIO para saída do misturador
+O projeto consiste em um sistema embarcado para controle de temperatura para a confecção de cerveja. O sistema embarcado deverá através do uso de sensores de temperatura, sistema de aquecimento e motor para mistura, manter determinadas temperaturas por intervalos definidos e manter a homogeneidade térmica da cerveja durante este processo.
 
--> PWM ou GPIO com histerese para controle de aquecimento
+# Tecnologias Utilizadas:
 
--> Conter curva padrão --> 67º - t0; 78º - t1; 85 - t2.
-
--> Sistema de adição de curva
-
--> Interface pelo computador (PC <-> ESP)
-
--> Detectar erros no processo e mostrar avisos
-
--> Controle de temperatura através de PID ou on/off com histerese.
-
--> Documentação com: descrição de hardware, stateshart
-
--> DOXYGEN -> opcional para documentação
-
--> Ligar o Mixer quando os sensores de temperatura tiver 1º de diferença (manter por um período após estabilizar)
+* Hardware Principal: ESP32
+* Software: 
+    * Criação de Statechart: itemis CREATE
+    * Sistema operacional para controle de tasks: FreeRTOS
+    * Compilador: Arduino IDE
+* Linguagens:
+    * Aplicação: C++
+    * Interface gráfica: Python
+* Periféricos:
+    * Inputs: 2 sensores de temperatura (I2C)
+    * Outputs: Aquecimento (PWM), Mixer (Gpio)
 
 
-# Requisitos reais definidos para o projeto
+# Requisitos definidos para o projeto
 
 ## Requisitos Funcionais (RF)
 
@@ -35,7 +30,7 @@ Projeto de sistemas embarcados
 | **RF‑02** | Controlar o misturador (ligar/desligar) durante o processo.                                                                                            |
 | **RF‑03** | Controlar o aquecedor mantendo a temperatura‑alvo.                                                                                                     |
 | **RF‑04** | Permitir a execução da curva padrão.                                                                                                                   |
-| **RF‑05** | Permitir ao usuário criar e editar curvas de temperatura personalizadas.                                                                                |
+| **RF‑05** | Permitir ao usuário criar e editar curvas de temperatura personalizadas.                                                                               |
 | **RF‑06** | Comunicar‑se com um computador (PC ↔ ESP) para configuração e monitoramento.                                                                           |
 | **RF‑07** | Detectar falhas (sensores fora de faixa, sobre‑temperatura, falha de agitador, etc.) e exibir avisos ao operador.                                      |
 | **RF‑08** | Oferecer controle de temperatura On/Off com histerese.                                                                                                 |
@@ -92,3 +87,84 @@ Projeto de sistemas embarcados
 
 ---
 
+
+
+## Estrutura de Tasks do Projeto
+
+O projeto utiliza **FreeRTOS** com múltiplas *tasks* concorrentes, cada uma responsável por uma parte específica do controle, aquisição ou interação do sistema embarcado. A seguir, é feita uma explicação prévia de cada uma:
+
+---
+
+### `TimerTask`
+
+Responsável por manter o controle de tempo interno usado pelo *statechart*. A cada 1 segundo, decrementa um contador (`cb.secLeft`) e, ao chegar a zero, sinaliza o evento `timer_trigger` para a máquina de estados.
+
+---
+
+### `PidTask`
+
+Implementa o **controle PID** da temperatura baseado na leitura de um dos sensores (Sensor 1).
+Funções principais:
+
+* Lê o *setpoint* definido pelo usuário (`cb.setPoint`);
+* Lê a temperatura atual (`g_sensor1`);
+* Executa o cálculo PID com base nesses valores;
+* Atualiza a saída PWM (`ledcWrite`) para ajustar o atuador conforme o erro.
+
+Além disso, a task configura o controlador PID e o PWM na inicialização.
+
+---
+
+### `I2CTask`
+
+Realiza a leitura periódica (1 Hz) dos sensores de temperatura via barramento **I²C**.
+A cada execução:
+
+* Tenta ler valores dos sensores em `I2C_ADDR_SENSOR1` e `I2C_ADDR_SENSOR2`;
+* Se a leitura for bem-sucedida, atualiza as variáveis globais `g_sensor1` e `g_sensor2`.
+
+---
+
+### `TempTask`
+
+Task de supervisão térmica, que:
+
+* Verifica se a temperatura está fora da faixa em relação ao setpoint;
+* Verifica discrepância entre os dois sensores (ex: se a diferença for maior que 1 grau);
+* Aciona eventos na máquina de estados (`raiseTemp_wrong`, `raiseTemp_right`, `raiseMixer_on`, `raiseMixer_off`);
+* Gera *logs* no formato `DATA-setP-s1-s2-diffFlag` para possível análise posterior.
+
+---
+
+### `UartTask`
+
+Monitora a interface **UART** (serial) para comandos externos.
+Permite interações como:
+
+* Definir novo setpoint com valores inteiros;
+* Comandos de controle como `start`, `default`, `reset`, `new`, etc.;
+* Inserção direta de valores simulados de temperatura (`TEMPONExxx` e `TEMPTWOxxx`).
+
+Interpreta a entrada caractere por caractere e processa ao detectar final de linha (`\n` ou `\r`).
+
+---
+
+### `app_tasks_init()`
+
+Função que realiza a **inicialização das tarefas** e componentes do sistema:
+
+* Inicializa mutex de proteção de máquina de estados;
+* Configura pinos e UART via `CallbackModule`;
+* Inicializa o barramento I²C;
+* Cria todas as *tasks* do sistema com suas respectivas prioridades.
+
+
+
+
+### Simulação
+
+Uma demonstração do sistema funcionando está disponível no video "funcionamento_brew_master.mp4", e consiste em utilizar um arduino secudário para fazer o papel de aquecimento e sensor de temperatura 1, mostrando, junto com a interface gráfica, o funcionamento da statechart, comunicação I2C, controle PID e seu PWM, funcionamento do timer, adição de configuração de curvas, dentre outros.
+
+Clique abaixo para acessar o vídeo:
+
+[![Clique aqui para ver a demonstração em vídeo](https://img.youtube.com/vi/GieusbFribU/hqdefault.jpg)](https://www.youtube.com/watch?v=GieusbFribU)
